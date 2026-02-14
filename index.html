@@ -79,6 +79,15 @@
     margin: 2rem auto;
   }
 
+  .header-disclaimer {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+  }
+
   /* Form container */
   .form-container {
     max-width: 560px;
@@ -480,6 +489,7 @@
   <header class="header">
     <p class="header-eyebrow">Interest Form</p>
     <h1>UVA Drama Club<br><em>of New York</em></h1>
+    <p class="header-disclaimer">*not affiliated with the University of Virginia</p>
     <div class="header-line"></div>
   </header>
 
@@ -530,39 +540,38 @@
       <div class="section-divider"></div>
 
       <div class="form-section" style="animation-delay: 0.3s">
-        <label class="field-label">Affiliation <span class="required">*</span></label>
-        <p class="field-hint">Select all that apply</p>
+        <label class="field-label">Which VA school did you attend? <span class="required">*</span></label>
         <div class="options-group">
           <label class="option-item">
-            <input type="checkbox" name="affiliation" value="UVA">
+            <input type="radio" name="affiliation" value="UVA">
             <span class="option-label">UVA</span>
           </label>
           <label class="option-item">
-            <input type="checkbox" name="affiliation" value="JMU">
+            <input type="radio" name="affiliation" value="JMU">
             <span class="option-label">JMU</span>
           </label>
           <label class="option-item">
-            <input type="checkbox" name="affiliation" value="VCU">
+            <input type="radio" name="affiliation" value="VCU">
             <span class="option-label">VCU</span>
           </label>
           <label class="option-item">
-            <input type="checkbox" name="affiliation" value="William and Mary">
+            <input type="radio" name="affiliation" value="William and Mary">
             <span class="option-label">William and Mary</span>
           </label>
           <label class="option-item">
-            <input type="checkbox" name="affiliation" value="Hollins">
+            <input type="radio" name="affiliation" value="Hollins">
             <span class="option-label">Hollins</span>
           </label>
           <label class="option-item">
-            <input type="checkbox" name="affiliation" value="Friend">
+            <input type="radio" name="affiliation" value="Friend">
             <span class="option-label">Friend <span class="option-label-hint">(i.e. I didn't attend a Virginia school)</span></span>
           </label>
           <label class="option-item">
-            <input type="checkbox" name="affiliation" value="Foe">
+            <input type="radio" name="affiliation" value="Foe">
             <span class="option-label">Foe <span class="option-label-hint">(i.e. I attended Virginia Tech)</span></span>
           </label>
           <label class="option-item">
-            <input type="checkbox" name="affiliation" value="Other" id="affiliationOtherCheck">
+            <input type="radio" name="affiliation" value="Other" id="affiliationOtherCheck">
             <span class="option-label">Other:</span>
             <input type="text" class="other-input" id="affiliationOtherText" placeholder="Please specify">
           </label>
@@ -689,8 +698,8 @@
   });
 
   document.getElementById('affiliationOtherText').addEventListener('focus', () => {
-    const cb = document.getElementById('affiliationOtherCheck');
-    if (!cb.checked) { cb.checked = true; cb.closest('.option-item').classList.add('selected'); }
+    const rb = document.getElementById('affiliationOtherCheck');
+    if (!rb.checked) { rb.checked = true; rb.dispatchEvent(new Event('change', { bubbles: true })); }
   });
 
   document.getElementById('roleOtherText').addEventListener('focus', () => {
@@ -719,7 +728,7 @@
     const email = document.getElementById('email').value.trim();
     const emailError = document.getElementById('emailError');
     const emailInput = document.getElementById('email');
-    const affiliations = document.querySelectorAll('input[name="affiliation"]:checked');
+    const affiliations = document.querySelector('input[name="affiliation"]:checked');
     const roles = document.querySelectorAll('input[name="role"]:checked');
     const support = document.querySelector('input[name="support"]:checked');
 
@@ -745,8 +754,8 @@
       return;
     }
 
-    if (affiliations.length === 0) {
-      alert('Please select at least one affiliation.');
+    if (!affiliations) {
+      alert('Please select a school affiliation.');
       return;
     }
 
@@ -754,9 +763,9 @@
       firstName, lastName, email,
       preferredName: document.getElementById('preferredName').value.trim(),
       pronouns: document.getElementById('pronouns').value.trim(),
-      affiliation: Array.from(affiliations).map(cb =>
-        cb.value === 'Other' ? 'Other: ' + document.getElementById('affiliationOtherText').value.trim() : cb.value
-      ).join(', '),
+      affiliation: affiliations.value === 'Other'
+        ? 'Other: ' + document.getElementById('affiliationOtherText').value.trim()
+        : affiliations.value,
       role: Array.from(roles).map(cb =>
         cb.value === 'Other' ? 'Other: ' + document.getElementById('roleOtherText').value.trim() : cb.value
       ).join(', '),
