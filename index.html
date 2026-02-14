@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UVA Drama Club of New York</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f6f1eb;
+    --warm-white: #fdfcfa;
+    --sage: #7a8a6e;
+    --sage-light: #e8ece4;
+    --sage-dark: #5c6b52;
+    --earth: #3a302a;
+    --text: #2c261f;
+    --text-light: #6b5f54;
+    --text-muted: #8f8378;
+    --border: #c4b9ae;
+    --border-light: #d8cfc6;
+    --error: #b85c4d;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.01em;
+  }
+
+  .accent-line {
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .header-eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(2rem, 5.5vw, 3rem);
+    line-height: 1.15;
+    color: var(--earth);
+    letter-spacing: -0.01em;
+  }
+
+  .header h1 em {
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .header-line {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+    margin: 2rem auto;
+  }
+
+  /* Form container */
+  .form-container {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+  }
+
+  /* Intro text */
+  .form-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.85;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .form-intro p {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-intro .intro-list {
+    padding-left: 1.2rem;
+    margin: 0.75rem 0 1.25rem;
+  }
+
+  .form-intro .intro-list li {
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+  }
+
+  .form-intro .intro-note {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+
+  .form-intro .intro-time {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 1.5rem;
+    display: block;
+  }
+
+  .intro-divider {
+    width: 1px;
+    height: 50px;
+    background: var(--border);
+    margin: 2.5rem auto 3rem;
+  }
+
+  /* Form sections */
+  .form-section {
+    margin-bottom: 2.25rem;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: softReveal 0.6s ease forwards;
+  }
+
+  @keyframes softReveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .form-section label.field-label {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.01em;
+  }
+
+  .field-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .required {
+    color: var(--error);
+    font-weight: 600;
+  }
+
+  /* Text inputs */
+  input[type="text"],
+  input[type="email"] {
+    width: 100%;
+    padding: 0.75rem 0;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: transparent;
+    transition: border-color 0.35s ease;
+    letter-spacing: 0.02em;
+    border-radius: 0;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus {
+    outline: none;
+    border-bottom-color: var(--sage);
+  }
+
+  input[type="text"]::placeholder,
+  input[type="email"]::placeholder {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  input.input-error {
+    border-bottom-color: var(--error);
+  }
+
+  .field-error {
+    font-size: 0.78rem;
+    color: var(--error);
+    margin-top: 0.4rem;
+    font-weight: 500;
+    min-height: 0;
+  }
+
+  /* Textarea */
+  textarea {
+    width: 100%;
+    padding: 0.75rem 0;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: transparent;
+    transition: border-color 0.35s ease;
+    letter-spacing: 0.02em;
+    border-radius: 0;
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-bottom-color: var(--sage);
+  }
+
+  textarea::placeholder {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* Section divider */
+  .section-divider {
+    width: 1px;
+    height: 30px;
+    background: var(--border-light);
+    margin: 2.5rem auto;
+  }
+
+  /* Checkbox & Radio groups */
+  .options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    cursor: pointer;
+    transition: background 0.25s ease;
+    border-radius: 4px;
+    margin-left: -0.85rem;
+    margin-right: -0.85rem;
+  }
+
+  .option-item:hover {
+    background: rgba(122, 138, 110, 0.06);
+  }
+
+  .option-item.selected {
+    background: var(--sage-light);
+  }
+
+  .option-item input[type="checkbox"],
+  .option-item input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--border);
+    background: var(--warm-white);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .option-item input[type="checkbox"] {
+    border-radius: 3px;
+  }
+
+  .option-item input[type="radio"] {
+    border-radius: 50%;
+  }
+
+  .option-item input[type="checkbox"]:checked,
+  .option-item input[type="radio"]:checked {
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+
+  .option-item input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 6px;
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg);
+  }
+
+  .option-item input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  .option-label {
+    font-size: 0.92rem;
+    color: var(--text);
+    user-select: none;
+    font-weight: 500;
+  }
+
+  .option-label-hint {
+    color: var(--text-light);
+    font-size: 0.88rem;
+    font-style: normal;
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+  }
+
+  .other-input {
+    flex: 1;
+    padding: 0.3rem 0;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 0.88rem;
+    color: var(--text);
+    background: transparent;
+    transition: border-color 0.3s ease;
+    min-width: 0;
+    border-radius: 0;
+  }
+
+  .other-input:focus {
+    outline: none;
+    border-bottom-color: var(--sage);
+  }
+
+  .other-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  /* Conditional section */
+  .conditional-section {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.4s ease;
+  }
+
+  .conditional-section.visible {
+    max-height: 500px;
+    opacity: 1;
+  }
+
+  /* Submit button */
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 3rem;
+    background: var(--sage);
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.35s ease, transform 0.2s ease;
+  }
+
+  .submit-btn:hover {
+    background: var(--sage-dark);
+  }
+
+  .submit-btn:active {
+    transform: scale(0.995);
+  }
+
+  /* Thank you page */
+  .thank-you-page {
+    display: none;
+    min-height: 85vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .thank-you-page.visible {
+    display: flex;
+    animation: softReveal 0.7s ease both;
+  }
+
+  .thank-you-eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .thank-you-page h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+    color: var(--earth);
+    margin-bottom: 1rem;
+    line-height: 1.25;
+  }
+
+  .thank-you-line {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+    margin: 1.5rem auto;
+  }
+
+  .thank-you-page p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.85;
+    color: var(--text-light);
+  }
+
+  .thank-you-footer {
+    margin-top: 3rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .form-wrapper.hidden { display: none; }
+
+  @media (max-width: 480px) {
+    .form-container { padding: 0 1.4rem 4rem; }
+    .header { padding: 3rem 1.4rem 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="accent-line"></div>
+
+<div class="form-wrapper" id="formWrapper">
+  <header class="header">
+    <p class="header-eyebrow">Interest Form</p>
+    <h1>UVA Drama Club<br><em>of New York</em></h1>
+    <div class="header-line"></div>
+  </header>
+
+  <div class="form-container">
+    <div class="form-intro">
+      <p>Hi! We're in the process of developing a network of theatre artists from Virginia schools (and friends).</p>
+      <p>What this looks like:</p>
+      <ul class="intro-list">
+        <li>A database of theatre artists around the city open to collaborating on projects</li>
+        <li>A weekly? biweekly? newsletter on opportunities, celebrations, and events within the network
+          <br><span class="intro-note">(ex: "Jane is looking for new scripts!" "Staged reading coming up, come watch!" "Looking for actors for my play")</span></li>
+        <li>Monthly gatherings (the goal is to keep these free/as low cost as possible!)</li>
+      </ul>
+      <p>And no, we are NOT limited to just VA schools alumni — pls share this form with any friends that may be interested!</p>
+      <span class="intro-time">Should take less than 5 minutes</span>
+    </div>
+
+    <div class="intro-divider"></div>
+
+    <form id="intakeForm" novalidate>
+
+      <div class="form-section" style="animation-delay: 0.05s">
+        <label class="field-label" for="firstName">First Name <span class="required">*</span></label>
+        <input type="text" id="firstName" name="firstName" placeholder="Viola">
+      </div>
+
+      <div class="form-section" style="animation-delay: 0.1s">
+        <label class="field-label" for="lastName">Last Name <span class="required">*</span></label>
+        <input type="text" id="lastName" name="lastName" placeholder="de Lesseps">
+      </div>
+
+      <div class="form-section" style="animation-delay: 0.15s">
+        <label class="field-label" for="email">Email <span class="required">*</span></label>
+        <input type="email" id="email" name="email" placeholder="viola@email.com">
+        <p class="field-error" id="emailError"></p>
+      </div>
+
+      <div class="form-section" style="animation-delay: 0.2s">
+        <label class="field-label" for="preferredName">Preferred Name</label>
+        <input type="text" id="preferredName" name="preferredName" placeholder="What should we call you?">
+      </div>
+
+      <div class="form-section" style="animation-delay: 0.25s">
+        <label class="field-label" for="pronouns">Pronouns</label>
+        <input type="text" id="pronouns" name="pronouns" placeholder="she/her, he/him, they/them">
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="form-section" style="animation-delay: 0.3s">
+        <label class="field-label">Affiliation <span class="required">*</span></label>
+        <p class="field-hint">Select all that apply</p>
+        <div class="options-group">
+          <label class="option-item">
+            <input type="checkbox" name="affiliation" value="UVA">
+            <span class="option-label">UVA</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="affiliation" value="JMU">
+            <span class="option-label">JMU</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="affiliation" value="VCU">
+            <span class="option-label">VCU</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="affiliation" value="William and Mary">
+            <span class="option-label">William and Mary</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="affiliation" value="Hollins">
+            <span class="option-label">Hollins</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="affiliation" value="Friend">
+            <span class="option-label">Friend <span class="option-label-hint">(i.e. I didn't attend a Virginia school)</span></span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="affiliation" value="Foe">
+            <span class="option-label">Foe <span class="option-label-hint">(i.e. I attended Virginia Tech)</span></span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="affiliation" value="Other" id="affiliationOtherCheck">
+            <span class="option-label">Other:</span>
+            <input type="text" class="other-input" id="affiliationOtherText" placeholder="Please specify">
+          </label>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="form-section" style="animation-delay: 0.35s">
+        <label class="field-label">Are you a(n):</label>
+        <p class="field-hint">Select all that apply</p>
+        <div class="options-group">
+          <label class="option-item">
+            <input type="checkbox" name="role" value="Actor">
+            <span class="option-label">Actor</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="role" value="Director">
+            <span class="option-label">Director</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="role" value="Designer">
+            <span class="option-label">Designer</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="role" value="Playwright">
+            <span class="option-label">Playwright</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="role" value="Stage Manager">
+            <span class="option-label">Stage Manager</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="role" value="Other" id="roleOtherCheck">
+            <span class="option-label">Other:</span>
+            <input type="text" class="other-input" id="roleOtherText" placeholder="Please specify">
+          </label>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="form-section" style="animation-delay: 0.4s">
+        <label class="field-label" for="additionalInfo">Please use this space to share any additional information about yourself</label>
+        <p class="field-hint">Stylistic preferences, areas of interest, what you are in need of, what projects you're interested in, any ideas you may have, etc.</p>
+        <textarea id="additionalInfo" name="additionalInfo" placeholder="Tell us more..." rows="5"></textarea>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="form-section" style="animation-delay: 0.45s">
+        <label class="field-label">Do you have any interest in supporting the development of this project?</label>
+        <div class="options-group">
+          <label class="option-item">
+            <input type="radio" name="support" value="Yes" id="supportYes">
+            <span class="option-label">Yes!</span>
+          </label>
+          <label class="option-item">
+            <input type="radio" name="support" value="No" id="supportNo">
+            <span class="option-label">No!</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="conditional-section" id="helpSection">
+        <div class="section-divider"></div>
+        <div class="form-section" style="animation-delay: 0s">
+          <label class="field-label">How would you like to help?</label>
+          <p class="field-hint">Select all that apply</p>
+          <div class="options-group">
+            <label class="option-item">
+              <input type="checkbox" name="help" value="Marketing">
+              <span class="option-label">Marketing</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="help" value="Events">
+              <span class="option-label">Events</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="help" value="Copywriting">
+              <span class="option-label">Copywriting</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="help" value="Outreach">
+              <span class="option-label">Outreach</span>
+            </label>
+            <label class="option-item">
+              <input type="checkbox" name="help" value="Fundraising">
+              <span class="option-label">Fundraising</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit</button>
+    </form>
+  </div>
+</div>
+
+<div class="thank-you-page" id="thankYouPage">
+  <p class="thank-you-eyebrow">Received</p>
+  <h2>Thank You</h2>
+  <div class="thank-you-line"></div>
+  <p>
+    Thank you for expressing interest in the UVA Drama Club of New York!
+  </p>
+  <p class="thank-you-footer">We Will Be In Touch!</p>
+</div>
+
+<script>
+  document.querySelectorAll('.option-item input[type="checkbox"], .option-item input[type="radio"]').forEach(input => {
+    input.addEventListener('change', () => {
+      const item = input.closest('.option-item');
+      if (input.type === 'radio') {
+        input.closest('.options-group').querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+      }
+      item.classList.toggle('selected', input.checked);
+    });
+  });
+
+  document.getElementById('email').addEventListener('input', () => {
+    document.getElementById('emailError').textContent = '';
+    document.getElementById('email').classList.remove('input-error');
+  });
+
+  document.getElementById('affiliationOtherText').addEventListener('focus', () => {
+    const cb = document.getElementById('affiliationOtherCheck');
+    if (!cb.checked) { cb.checked = true; cb.closest('.option-item').classList.add('selected'); }
+  });
+
+  document.getElementById('roleOtherText').addEventListener('focus', () => {
+    const cb = document.getElementById('roleOtherCheck');
+    if (!cb.checked) { cb.checked = true; cb.closest('.option-item').classList.add('selected'); }
+  });
+
+  document.getElementById('supportYes').addEventListener('change', () => {
+    document.getElementById('helpSection').classList.add('visible');
+  });
+
+  document.getElementById('supportNo').addEventListener('change', () => {
+    const section = document.getElementById('helpSection');
+    section.classList.remove('visible');
+    section.querySelectorAll('input[name="help"]').forEach(cb => {
+      cb.checked = false;
+      cb.closest('.option-item').classList.remove('selected');
+    });
+  });
+
+  document.getElementById('intakeForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const emailError = document.getElementById('emailError');
+    const emailInput = document.getElementById('email');
+    const affiliations = document.querySelectorAll('input[name="affiliation"]:checked');
+    const roles = document.querySelectorAll('input[name="role"]:checked');
+    const support = document.querySelector('input[name="support"]:checked');
+
+    emailError.textContent = '';
+    emailInput.classList.remove('input-error');
+
+    if (!firstName || !lastName) {
+      alert('Please fill in your first and last name.');
+      return;
+    }
+
+    if (!email) {
+      emailError.textContent = 'Email is required.';
+      emailInput.classList.add('input-error');
+      emailInput.focus();
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailError.textContent = 'Please enter a valid email address.';
+      emailInput.classList.add('input-error');
+      emailInput.focus();
+      return;
+    }
+
+    if (affiliations.length === 0) {
+      alert('Please select at least one affiliation.');
+      return;
+    }
+
+    const formData = {
+      firstName, lastName, email,
+      preferredName: document.getElementById('preferredName').value.trim(),
+      pronouns: document.getElementById('pronouns').value.trim(),
+      affiliation: Array.from(affiliations).map(cb =>
+        cb.value === 'Other' ? 'Other: ' + document.getElementById('affiliationOtherText').value.trim() : cb.value
+      ).join(', '),
+      role: Array.from(roles).map(cb =>
+        cb.value === 'Other' ? 'Other: ' + document.getElementById('roleOtherText').value.trim() : cb.value
+      ).join(', '),
+      supportInterest: support ? support.value : 'Not answered',
+      helpAreas: (support && support.value === 'Yes')
+        ? Array.from(document.querySelectorAll('input[name="help"]:checked')).map(cb => cb.value).join(', ')
+        : '',
+      additionalInfo: document.getElementById('additionalInfo').value.trim()
+    };
+
+    // =====================================================
+    // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW
+    // =====================================================
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgmX511TtTc4jdvD9EX5d6nCAdlIKjrD3tbFqUy0WeDRM8Gm8CNzpgLWAsTVkvnHrC/exec';
+    // =====================================================
+
+    const submitBtn = document.querySelector('.submit-btn');
+    submitBtn.textContent = 'SUBMITTING...';
+    submitBtn.disabled = true;
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+    .then(() => {
+      document.getElementById('formWrapper').classList.add('hidden');
+      document.getElementById('thankYouPage').classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch((err) => {
+      console.error('Submission error:', err);
+      alert('Something went wrong. Please try again.');
+      submitBtn.textContent = 'SUBMIT';
+      submitBtn.disabled = false;
+    });
+  });
+</script>
+
+</body>
+</html>
